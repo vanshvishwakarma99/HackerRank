@@ -1,0 +1,17 @@
+#include <stdio.h>
+
+long saveThePrisoner(long n, long m, long s) {
+    long last_chair = (s + m - 1) % n;
+    return last_chair == 0 ? n : last_chair;
+}
+
+int main() {
+    int t;
+    scanf("%d", &t);
+    while (t--) {
+        long n, m, s;
+        scanf("%ld %ld %ld", &n, &m, &s);
+        printf("%ld\n", saveThePrisoner(n, m, s));
+    }
+    return 0;
+}
