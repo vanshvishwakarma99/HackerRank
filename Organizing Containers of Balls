@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int cmpfunc(const void *a, const void *b) {
+    int x = *(int*)a;
+    int y = *(int*)b;
+    if (x < y) return -1;
+    if (x > y) return 1;
+    return 0;
+}
+
+const char* organizingContainers(int **container, int n) {
+    int rowSum[n];
+    int colSum[n];
+
+    for (int i = 0; i < n; i++) {
+        rowSum[i] = 0;
+        colSum[i] = 0;
+    }
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            rowSum[i] += container[i][j];
+            colSum[j] += container[i][j];
+        }
+    }
+
+    qsort(rowSum, n, sizeof(int), cmpfunc);
+    qsort(colSum, n, sizeof(int), cmpfunc);
+
+    for (int i = 0; i < n; i++) {
+        if (rowSum[i] != colSum[i]) {
+            return "Impossible";
+        }
+    }
+    return "Possible";
+}
+
+int main() {
+    int q;
+    scanf("%d", &q);
+
+    while (q--) {
+        int n;
+        scanf("%d", &n);
+
+        int **container = malloc(n * sizeof(int *));
+        for (int i = 0; i < n; i++) {
+            container[i] = malloc(n * sizeof(int));
+            for (int j = 0; j < n; j++) {
+                scanf("%d", &container[i][j]);
+            }
+        }
+
+        printf("%s\n", organizingContainers(container, n));
+
+        for (int i = 0; i < n; i++) {
+            free(container[i]);
+        }
+        free(container);
+    }
+
+    return 0;
+}
