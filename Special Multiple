@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define MAX 10000
+
+typedef struct {
+    int remainder;
+    int parent;
+    char digit;
+} Node;
+
+char result[MAX];
+
+int main() {
+    int T;
+    scanf("%d", &T);
+    while (T--) {
+        int N;
+        scanf("%d", &N);
+
+        if (N == 1) {
+            printf("9\n");
+            continue;
+        }
+
+        int visited[501] = {0};
+        Node queue[5000];
+        int front = 0, rear = 0;
+
+        queue[rear].remainder = 9 % N;
+        queue[rear].parent = -1;
+        queue[rear].digit = '9';
+        rear++;
+        visited[9 % N] = 1;
+
+        int found = 0;
+        int index = -1;
+
+        while (front < rear) {
+            int r = queue[front].remainder;
+            if (r == 0) {
+                found = 1;
+                index = front;
+                break;
+            }
+
+            int r0 = (r * 10) % N;
+            if (!visited[r0]) {
+                visited[r0] = 1;
+                queue[rear].remainder = r0;
+                queue[rear].parent = front;
+                queue[rear].digit = '0';
+                rear++;
+            }
+
+            int r9 = (r * 10 + 9) % N;
+            if (!visited[r9]) {
+                visited[r9] = 1;
+                queue[rear].remainder = r9;
+                queue[rear].parent = front;
+                queue[rear].digit = '9';
+                rear++;
+            }
+
+            front++;
+        }
+
+        int len = 0;
+        while (index != -1) {
+            result[len++] = queue[index].digit;
+            index = queue[index].parent;
+        }
+
+        for (int i = len - 1; i >= 0; i--) {
+            putchar(result[i]);
+        }
+        putchar('\n');
+    }
+    return 0;
+}
