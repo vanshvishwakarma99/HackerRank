@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_SIZE 128
+
+long long flippingMatrix(int matrix[MAX_SIZE][MAX_SIZE], int n) {
+    int size = 2 * n;
+    long long max_sum = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            int candidates[4] = {
+                matrix[i][j],
+                matrix[i][size - 1 - j],
+                matrix[size - 1 - i][j],
+                matrix[size - 1 - i][size - 1 - j]
+            };
+            int max_val = candidates[0];
+            for (int k = 1; k < 4; k++) {
+                if (candidates[k] > max_val) {
+                    max_val = candidates[k];
+                }
+            }
+            max_sum += max_val;
+        }
+    }
+    return max_sum;
+}
+
+int main() {
+    int q;
+    if (scanf("%d", &q) != 1 || q < 0 || q > 1000) {
+        fprintf(stderr, "Invalid number of test cases\n");
+        return 1;
+    }
+    while (q--) {
+        int n;
+        if (scanf("%d", &n) != 1 || n <= 0 || n > MAX_SIZE / 2) {
+            fprintf(stderr, "Invalid n: must be between 1 and %d\n", MAX_SIZE / 2);
+            return 1;
+        }
+        int size = 2 * n;
+        int matrix[MAX_SIZE][MAX_SIZE];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (scanf("%d", &matrix[i][j]) != 1 || matrix[i][j] < 0) {
+                    fprintf(stderr, "Invalid matrix element at position (%d, %d)\n", i, j);
+                    return 1;
+                }
+            }
+        }
+        printf("%lld\n", flippingMatrix(matrix, n));
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
+    return 0;
+}
