@@ -1,0 +1,39 @@
+#include <stdio.h>
+
+int pylons(int k, int arr[], int n) {
+    int plants = 0, pos = 0;
+
+    while (pos < n) {
+        int left = pos - (k - 1);
+        if (left < 0) left = 0;
+        int right = pos + (k - 1);
+        if (right >= n) right = n - 1;
+
+        int city = -1;
+        for (int i = right; i >= left; i--) {
+            if (arr[i] == 1) {
+                city = i;
+                break;
+            }
+        }
+
+        if (city == -1) return -1;
+
+        plants++;
+        pos = city + k;
+    }
+
+    return plants;
+}
+
+int main() {
+    int n, k;
+    scanf("%d %d", &n, &k);
+    int arr[n];
+    for (int i = 0; i < n; i++) scanf("%d", &arr[i]);
+
+    int result = pylons(k, arr, n);
+    printf("%d\n", result);
+    return 0;
+}
+  
