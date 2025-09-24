@@ -1,0 +1,32 @@
+#include <stdio.h>
+
+int isPowerOfTwo(unsigned long long n) {
+    return (n & (n - 1)) == 0;
+}
+
+const char* counterGame(unsigned long long n) {
+    int turn = 0;
+
+    while (n != 1) {
+        if (isPowerOfTwo(n)) {
+            n = n / 2;
+        } else {
+            unsigned long long largest_power = 1ULL << (63 - __builtin_clzll(n));
+            n = n - largest_power;
+        }
+        turn = 1 - turn;
+    }
+
+    return turn == 1 ? "Louise" : "Richard";
+}
+
+int main() {
+    int t;
+    scanf("%d", &t);
+    while (t--) {
+        unsigned long long n;
+        scanf("%llu", &n);
+        printf("%s\n", counterGame(n));
+    }
+    return 0;
+}
