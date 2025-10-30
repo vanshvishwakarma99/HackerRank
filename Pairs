@@ -1,0 +1,30 @@
+int compare(const void *a, const void *b) {
+    return (*(int *)a - *(int *)b);
+}
+
+int pairs(int k, int arr_count, int* arr) {
+    // Sort the array first
+    qsort(arr, arr_count, sizeof(int), compare);
+
+    int count = 0;
+    int i = 0, j = 1;
+
+    while (j < arr_count) {
+        int diff = arr[j] - arr[i];
+
+        if (diff == k) {
+            count++;
+            i++;
+            j++;
+        } else if (diff < k) {
+            j++;
+        } else { // diff > k
+            i++;
+            if (i == j) {
+                j++;
+            }
+        }
+    }
+
+    return count;
+}
