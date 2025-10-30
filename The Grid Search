@@ -1,0 +1,21 @@
+char* gridSearch(int G_count, char** G, int P_count, char** P) {
+    static char yes[] = "YES";
+    static char no[] = "NO";
+
+    for (int i = 0; i <= G_count - P_count; i++) {
+        char* pos = G[i];
+        while ((pos = strstr(pos, P[0])) != NULL) {
+            int start_col = pos - G[i];
+            bool found = true;
+            for (int j = 1; j < P_count; j++) {
+                if (strncmp(G[i + j] + start_col, P[j], strlen(P[j])) != 0) {
+                    found = false;
+                    break;
+                }
+            }
+            if (found) return yes;
+            pos++;
+        }
+    }
+    return no;
+}
