@@ -1,0 +1,54 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <utility>
+
+int main() {
+    int n, m, k;
+    
+    if (!(std::cin >> n >> m >> k)) return 0;
+
+    std::map<int, std::vector<std::pair<int, int>>> trackmap;
+
+    for (int i = 0; i < k; i++) {
+        int r, c1, c2;
+        if (!(std::cin >> r >> c1 >> c2)) break;
+        
+        if (c1 > c2) std::swap(c1, c2); 
+        
+        trackmap[r].push_back({c1, c2});
+    }
+
+    long long totalCovered = 0;
+
+    for (auto& row : trackmap) {
+        auto& intervals = row.second;
+        
+        if (intervals.empty()) continue; 
+        
+        std::sort(intervals.begin(), intervals.end());
+
+        int start = intervals[0].first;
+        int end = intervals[0].second;
+
+        for (size_t i = 1; i < intervals.size(); i++) {
+            if (intervals[i].first <= end + 1) {
+                end = std::max(end, intervals[i].second);
+            } else {
+                totalCovered += (long long)end - start + 1;
+                
+                start = intervals[i].first;
+                end = intervals[i].second;
+            }
+        }
+        
+        totalCovered += (long long)end - start + 1;
+    }
+
+    long long totalCells = (long long)n * m;
+    
+    std::cout << totalCells - totalCovered << std::endl;
+
+    return 0;
+}
